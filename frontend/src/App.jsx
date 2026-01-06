@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import { Navigation } from "./components/Navigation"
 import { AddIcon, EditIcon, DeleteIcon } from "./components/Icons"
+import { Walkthrough } from "./components/Walkthrough"
 
 function App() {
   const [notes, setNotes] = useState([])
+  const [showWalkthrough, setShowWalkthrough] = useState(false)
 
   async function getNotes() {
     const response = await fetch("http://localhost:3000/notes")
@@ -17,6 +19,10 @@ function App() {
   useEffect(function () {
     getNotes()
   }, [])
+
+  if (showWalkthrough) {
+    return <Walkthrough onClose={() => setShowWalkthrough(false)} />
+  }
 
   const noteElements = notes.map((note) => (
     <div key={note.id} className="card">
@@ -38,9 +44,9 @@ function App() {
 
   return (
     <div className="layout">
-      <Navigation />
+      <Navigation onWalkthroughClick={() => setShowWalkthrough(true)} />
 
-      <main className="container">
+      <main className="container" style={{ maxWidth: "800px" }}>
         <div style={{ padding: "0 0.5rem 2rem" }}>
           <p className="text-muted">Capture ideas, lists, and thoughts.</p>
         </div>
