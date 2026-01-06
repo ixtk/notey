@@ -104,8 +104,14 @@ h1 {
 .textarea {
   min-height: 100px;
   resize: none;
-  font-size: 1.125rem; /* Match display font size */
+  /* font-size: 1.125rem; Match display font size */
   line-height: 1.75;
+}
+
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn {
