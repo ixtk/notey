@@ -6,6 +6,7 @@ import { Walkthrough } from "./components/Walkthrough"
 function App() {
   const [notes, setNotes] = useState([])
   const [showWalkthrough, setShowWalkthrough] = useState(false)
+  const [newNote, setNewNote] = useState("")
 
   async function getNotes() {
     const response = await fetch("http://localhost:3000/notes")
@@ -14,6 +15,28 @@ function App() {
     console.log(json.notes)
 
     setNotes(json.notes)
+  }
+
+  async function saveNote() {
+    console.log("Saving", newNote)
+
+    const response = await fetch("http://localhost:3000/note", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: newNote
+      })
+    })
+
+    const json = await response.json()
+
+    console.log(json)
+
+    setNotes([...notes, json.note])
+
+    setNewNote("")
   }
 
   useEffect(function () {
@@ -53,11 +76,19 @@ function App() {
 
         <div className="card">
           <div className="flex flex-col gap-3">
-            <textarea className="textarea" placeholder="What's on your mind?" />
+            <textarea
+              value={newNote}
+              onChange={function (event) {
+                setNewNote(event.target.value)
+              }}
+              className="textarea"
+              placeholder="What's on your mind?"
+            />
             <div className="flex justify-between items-center">
               <button
                 className="btn btn-primary"
                 style={{ marginLeft: "auto" }}
+                onClick={saveNote}
               >
                 <AddIcon />
                 Add Note

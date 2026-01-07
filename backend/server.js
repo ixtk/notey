@@ -12,29 +12,34 @@ app.use(
   })
 )
 
-app.get("/notes", function (request, response) {
-  const notes = [
-    {
-      id: "1",
-      content:
-        "Reflecting on the importance of focused deep work. In a world of constant distractions, the ability to concentrate is a superpower. \n\nNeed to schedule 2 hours of blocked time every morning.",
-      timestamp: "2 hours ago"
-    },
-    {
-      id: "2",
-      content:
-        "Q4 Roadmap Brainstorming:\n- Refresh the user interface\n- Improve mobile performance\n- Add dark mode support\n\nMeeting scheduled for Tuesday.",
-      timestamp: "5 hours ago"
-    },
-    {
-      id: "3",
-      content:
-        "Grocery run list for evening:\n- Sourdough bread\n- Avocados\n- Coffee beans\n- Oat milk",
-      timestamp: "Yesterday"
+const NoteSchema = new mongoose.Schema(
+  {
+    content: {
+      type: String,
+      required: true
     }
-  ]
+  },
+  { timestamps: true }
+)
+
+const NoteModel = mongoose.model("Note", NoteSchema)
+
+app.get("/notes", async function (request, response) {
+  const notes = await NoteModel.find()
 
   response.json({ notes: notes })
+})
+
+app.post("/note", async function (request, response) {
+  const newContent = request.body.content
+
+  console.log(newContent)
+
+  const newNote = await NoteModel.create({
+    content: newContent
+  })
+
+  response.status(201).json({ note: newNote })
 })
 
 mongoose
