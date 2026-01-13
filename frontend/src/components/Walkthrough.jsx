@@ -130,12 +130,50 @@ npm install`}
             </SyntaxHighlighter>
           </div>
 
-          <div>
+          <div style={{ marginBottom: "1.5rem" }}>
             <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
-              server.js ფაილის შექმნა
+              Mongoose Schema-ს შექმნა
             </h3>
             <p className="text-muted" style={{ marginBottom: "0.75rem" }}>
-              გამართეთ Express სერვერი CORS-ით და GET ენდპოინტით:
+              Mongoose Schema განსაზღვრავს მონაცემთა სტრუქტურას MongoDB-ში:
+            </p>
+            <SyntaxHighlighter
+              language="javascript"
+              style={vscDarkPlus}
+              customStyle={{
+                borderRadius: "8px",
+                fontSize: "0.9rem",
+                marginBottom: "0.75rem"
+              }}
+            >
+              {`const NoteSchema = new mongoose.Schema(
+  {
+    content: {
+      type: String,
+      required: true
+    }
+  },
+  { timestamps: true }  // ავტომატურად ქმნის createdAt და updatedAt
+)
+
+const NoteModel = mongoose.model("Note", NoteSchema)`}
+            </SyntaxHighlighter>
+            <ul className="text-muted" style={{ paddingLeft: "1.5rem" }}>
+              <li>
+                <strong>content</strong>: note-ის ტექსტი (სავალდებულო)
+              </li>
+              <li>
+                <strong>timestamps</strong>: თარიღების ავტომატური შენახვა
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+              სრული server.js ფაილი
+            </h3>
+            <p className="text-muted" style={{ marginBottom: "0.75rem" }}>
+              Express სერვერი CORS-ით, MongoDB-ით და ორი ენდპოინტით:
             </p>
             <SyntaxHighlighter
               language="javascript"
@@ -154,30 +192,48 @@ const app = express()
 // JSON მონაცემების დამუშავების მხარდაჭერა
 app.use(express.json())
 
-// CORS-ის ჩართვა (React მუშაობს 5173 პორტზე)
+// CORS-ის ჩართვა
 app.use(cors({
   origin: "http://localhost:5173"
 }))
 
-// GET ენდპოინტი note-ების წამოსაღებად
-app.get("/notes", function(request, response) {
-  const notes = [
-    {
-      id: "1",
-      content: "შენი პირველი note!",
-      timestamp: "2 საათის წინ"
+// Mongoose Schema
+const NoteSchema = new mongoose.Schema(
+  {
+    content: {
+      type: String,
+      required: true
     }
-  ]
+  },
+  { timestamps: true }
+)
+
+const NoteModel = mongoose.model("Note", NoteSchema)
+
+// GET - ყველა note-ის წამოღება
+app.get("/notes", async function(request, response) {
+  const notes = await NoteModel.find()
   response.json({ notes: notes })
 })
 
-// ბაზასთან დაკავშირება
+// POST - ახალი note-ის შექმნა
+app.post("/note", async function(request, response) {
+  const newContent = request.body.content
+  
+  const newNote = await NoteModel.create({
+    content: newContent
+  })
+  
+  response.status(201).json({ note: newNote })
+})
+
+// MongoDB-სთან დაკავშირება
 mongoose
   .connect("mongodb://127.0.0.1:27017/notey")
   .then(() => console.log("MongoDB დაკავშირებულია"))
   .catch((err) => console.error(err))
 
-// სერვერის გაშვება 3000 პორტზე
+// სერვერის გაშვება
 app.listen(3000, () => {
   console.log("სერვერი ჩაირთო 3000 პორტზე")
 })`}
@@ -376,6 +432,9 @@ function App() {
   // note-ების შესანახი მასივის შექმნა
   const [notes, setNotes] = useState([])
   
+  // ახალი note-ის ტექსტის შესანახი
+  const [newNote, setNewNote] = useState("")
+  
   // ... fetch და state-ის განახლება
 }`}
             </SyntaxHighlighter>
@@ -385,6 +444,13 @@ function App() {
               </li>
               <li>
                 <strong>setNotes</strong>: ფუნქცია ამ მასივის შესაცვლელად
+              </li>
+              <li>
+                <strong>newNote</strong>: ახალი note-ის შესაყვანი ტექსტი
+              </li>
+              <li>
+                <strong>setNewNote</strong>: ფუნქცია ფორმის ტექსტის
+                განახლებისთვის
               </li>
               <li>
                 state-ის ყოველი განახლებისას React ავტომატურად ასახავს
@@ -424,10 +490,112 @@ const noteElements = notes.map((note) => (
           </div>
         </div>
 
-        {/* Step 6: Running the App */}
+        {/* Step 6: Creating Notes */}
         <div className="card" style={{ marginBottom: "2rem" }}>
           <h2 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>
-            ნაბიჯი 6: აპლიკაციის გაშვება
+            ნაბიჯი 6: note-ების შექმნა
+          </h2>
+
+          <div style={{ marginBottom: "1.5rem" }}>
+            <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+              POST მოთხოვნის გაგზავნა
+            </h3>
+            <p className="text-muted" style={{ marginBottom: "0.75rem" }}>
+              ახალი note-ის შესანახად Backend-ში ვაგზავნით POST მოთხოვნას:
+            </p>
+            <SyntaxHighlighter
+              language="javascript"
+              style={vscDarkPlus}
+              customStyle={{
+                borderRadius: "8px",
+                fontSize: "0.9rem",
+                marginBottom: "0.75rem"
+              }}
+            >
+              {`async function saveNote() {
+  const response = await fetch("http://localhost:3000/note", {
+    method: "POST",  // POST მეთოდი ახალი მონაცემების შესანახად
+    headers: {
+      "Content-Type": "application/json"  // JSON ფორმატი
+    },
+    body: JSON.stringify({
+      content: newNote  // note-ის ტექსტი
+    })
+  })
+  
+  const json = await response.json()
+  
+  // ვამატებთ ახალ note-ს არსებულ სიაში
+  setNotes([...notes, json.note])
+  
+  // ვასუფთავებთ ფორმას
+  setNewNote("")
+}`}
+            </SyntaxHighlighter>
+            <ul className="text-muted" style={{ paddingLeft: "1.5rem" }}>
+              <li>
+                <strong>method: "POST"</strong>: მონაცემების გაგზავნის მეთოდი
+              </li>
+              <li>
+                <strong>headers</strong>: ვეუბნებით სერვერს, რომ JSON-ს ვგზავნით
+              </li>
+              <li>
+                <strong>body</strong>: JSON.stringify გარდაქმნის ობიექტს JSON
+                string-ად
+              </li>
+              <li>
+                <strong>[...notes, json.note]</strong>: ძველ სიას ვამატებთ ახალ
+                note-ს
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+              ფორმის შექმნა
+            </h3>
+            <p className="text-muted" style={{ marginBottom: "0.75rem" }}>
+              textarea და ღილაკი ახალი note-ის შესაყვანად:
+            </p>
+            <SyntaxHighlighter
+              language="jsx"
+              style={vscDarkPlus}
+              customStyle={{
+                borderRadius: "8px",
+                fontSize: "0.9rem",
+                marginBottom: "0.75rem"
+              }}
+            >
+              {`<div className="card">
+  <textarea
+    value={newNote}
+    onChange={function(event) {
+      setNewNote(event.target.value)  // state-ის განახლება ყოველი კლავიშის დაჭერისას
+    }}
+    className="textarea"
+    placeholder="What's on your mind?"
+  />
+  
+  <button
+    className="btn btn-primary"
+    onClick={saveNote}
+  >
+    Add Note
+  </button>
+</div>`}
+            </SyntaxHighlighter>
+            <p className="text-muted">
+              <strong>value=&#123;newNote&#125;</strong> აკავშირებს ფორმას
+              state-თან, ხოლო <strong>onChange</strong> ყოველი შეყვანის დროს
+              ანახლებს state-ს.
+            </p>
+          </div>
+        </div>
+
+        {/* Step 7: Running the App */}
+        <div className="card" style={{ marginBottom: "2rem" }}>
+          <h2 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>
+            ნაბიჯი 7: აპლიკაციის გაშვება
           </h2>
 
           <div style={{ marginBottom: "1.5rem" }}>
@@ -496,15 +664,15 @@ npm run dev`}
           </div>
         </div>
 
-        {/* Step 7: Current Architecture */}
+        {/* Step 8: Current Architecture */}
         <div className="card" style={{ marginBottom: "2rem" }}>
           <h2 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>
-            ნაბიჯი 7: მუშაობის პრინციპი
+            ნაბიჯი 8: მუშაობის პრინციპი
           </h2>
 
-          <div>
+          <div style={{ marginBottom: "1.5rem" }}>
             <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
-              მონაცემთა მიმოცვლის ციკლი
+              GET - მონაცემების წამოღება
             </h3>
             <div
               style={{
@@ -554,6 +722,55 @@ npm run dev`}
               10. მომხმარებელი ხედავს note-ებს ეკრანზე!
             </div>
           </div>
+
+          <div>
+            <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem" }}>
+              POST - ახალი note-ის შექმნა
+            </h3>
+            <div
+              style={{
+                background: "var(--bg-secondary)",
+                padding: "1rem",
+                borderRadius: "8px",
+                fontSize: "0.9rem",
+                lineHeight: "1.8"
+              }}
+            >
+              1. მომხმარებელი წერს ტექსტს textarea-ში
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              2. onChange-ით ტექსტი ინახება newNote state-ში
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              3. მომხმარებელი აჭერს "Add Note" ღილაკს
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              4. saveNote() აგზავნის POST მოთხოვნას
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              5. Backend იღებს content-ს და ქმნის MongoDB-ში
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              6. Backend აბრუნებს ახალ note-ს JSON-ით
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              7. Frontend ამატებს ახალ note-ს notes მასივში
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              8. React რენდერავს განახლებულ სიას
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;↓
+              <br />
+              9. მომხმარებელი ხედავს ახალ note-ს!
+            </div>
+          </div>
         </div>
 
         {/* Next Steps */}
@@ -562,23 +779,17 @@ npm run dev`}
             შემდეგი ნაბიჯები
           </h2>
           <p className="text-muted" style={{ marginBottom: "1rem" }}>
-            ამ ეტაპზე აპლიკაცია მხოლოდ კითხულობს note-ებს.
+            ამ ეტაპზე აპლიკაცია კითხულობს და ქმნის note-ებს. აი, რისი დამატება
+            შეგიძლიათ:
           </p>
           <ul className="text-muted" style={{ paddingLeft: "1.5rem" }}>
             <li>
-              <strong>note-ების შექმნა</strong>: POST მოთხოვნა ახალი ჩანაწერების
-              შესანახად
-            </li>
-            <li>
-              <strong>note-ების რედაქტირება</strong>: PUT მოთხოვნა არსებული
-              ინფორმაციის განახლებისთვის
+              <strong>note-ების რედაქტირება</strong>: PUT/PATCH მოთხოვნა
+              არსებული ინფორმაციის განახლებისთვის
             </li>
             <li>
               <strong>note-ების წაშლა</strong>: DELETE მოთხოვნა ჩანაწერის
               მოსაცილებლად
-            </li>
-            <li>
-              <strong>MongoDB ინტეგრაცია</strong>: რეალური ბაზის დაკავშირება
             </li>
             <li>
               <strong>ძებნა</strong>: note-ების ფილტრაცია ტექსტის მიხედვით
