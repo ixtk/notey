@@ -42,6 +42,16 @@ app.post("/note", async function (request, response) {
   response.status(201).json({ note: newNote })
 })
 
+app.delete("/notes/:noteIdToDelete", async function (request, response) {
+  const noteIdToDelete = request.params.noteIdToDelete
+
+  console.log(noteIdToDelete)
+
+  await NoteModel.findByIdAndDelete(noteIdToDelete)
+
+  response.json({ message: "Deleted" })
+})
+
 mongoose
   .connect("mongodb://127.0.0.1:27017/notey")
   .then(() => console.log("MongoDB connected"))

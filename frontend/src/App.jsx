@@ -34,9 +34,32 @@ function App() {
 
     console.log(json)
 
-    setNotes([...notes, json.note])
+    setNotes([json.note, ...notes])
 
     setNewNote("")
+  }
+
+  async function deleteNote(noteIdToDelete) {
+    console.log("Deleting", noteIdToDelete)
+
+    const response = await fetch(
+      `http://localhost:3000/notes/${noteIdToDelete}`,
+      {
+        method: "DELETE"
+      }
+    )
+
+    // prevNotes.filter(note => note.id !== noteIdToDelete)
+
+    const updatedNotes = notes.filter(function(note) {
+      if (note._id === noteIdToDelete) {
+        return false
+      } else {
+        return true
+      }
+    })
+
+    setNotes(updatedNotes)
   }
 
   useEffect(function () {
@@ -48,7 +71,8 @@ function App() {
   }
 
   const noteElements = notes.map((note) => (
-    <div key={note.id} className="card">
+    <div key={note._id} className="card">
+      {/* <h3>{note._id}</h3> */}
       <div className="note-content mb-4">{note.content}</div>
       <div className="flex justify-between items-center">
         <span className="text-sm text-muted">{note.timestamp}</span>
@@ -57,7 +81,11 @@ function App() {
           <button className="btn btn-ghost" title="Edit">
             <EditIcon />
           </button>
-          <button className="btn btn-ghost danger" title="Delete">
+          <button
+            onClick={() => deleteNote(note._id)}
+            className="btn btn-ghost danger"
+            title="Delete"
+          >
             <DeleteIcon />
           </button>
         </div>
