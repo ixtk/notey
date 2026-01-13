@@ -7,6 +7,7 @@ function App() {
   const [notes, setNotes] = useState([])
   const [showWalkthrough, setShowWalkthrough] = useState(false)
   const [newNote, setNewNote] = useState("")
+  const [isEditing, setIsEditing] = useState(false)
 
   async function getNotes() {
     const response = await fetch("http://localhost:3000/notes")
@@ -51,7 +52,7 @@ function App() {
 
     // prevNotes.filter(note => note.id !== noteIdToDelete)
 
-    const updatedNotes = notes.filter(function(note) {
+    const updatedNotes = notes.filter(function (note) {
       if (note._id === noteIdToDelete) {
         return false
       } else {
@@ -73,21 +74,45 @@ function App() {
   const noteElements = notes.map((note) => (
     <div key={note._id} className="card">
       {/* <h3>{note._id}</h3> */}
-      <div className="note-content mb-4">{note.content}</div>
+
+      {/* 
+      
+      თუ isEditing არის true, გამოვაჩინოთ textarea, სხვა შემთხვევაში div
+      
+      */}
+
+      {isEditing === true ? (
+        <textarea className="textarea">{note.content}</textarea>
+      ) : (
+        <div className="note-content mb-4">{note.content}</div>
+      )}
+
       <div className="flex justify-between items-center">
         <span className="text-sm text-muted">{note.timestamp}</span>
 
         <div className="card-actions">
-          <button className="btn btn-ghost" title="Edit">
-            <EditIcon />
-          </button>
-          <button
-            onClick={() => deleteNote(note._id)}
-            className="btn btn-ghost danger"
-            title="Delete"
-          >
-            <DeleteIcon />
-          </button>
+          {isEditing === true ? (
+            <button className="btn btn-primary">Save</button>
+          ) : (
+            <>
+              <button
+                onClick={function () {
+                  setIsEditing(true)
+                }}
+                className="btn btn-ghost"
+                title="Edit"
+              >
+                <EditIcon />
+              </button>
+              <button
+                onClick={() => deleteNote(note._id)}
+                className="btn btn-ghost danger"
+                title="Delete"
+              >
+                <DeleteIcon />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
