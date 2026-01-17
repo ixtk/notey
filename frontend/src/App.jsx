@@ -92,7 +92,14 @@ function App() {
 
         <div className="card-actions">
           {isEditing === true ? (
-            <button className="btn btn-primary">Save</button>
+            <>
+              <button className="btn btn-ghost" title="Cancel">
+                Cancel
+              </button>
+              <button className="btn btn-primary" title="Save">
+                Save
+              </button>
+            </>
           ) : (
             <>
               <button

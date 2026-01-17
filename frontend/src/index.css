@@ -19,7 +19,11 @@
 }
 
 body {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
   background-color: var(--bg);
   color: var(--text);
   line-height: 1.5;
@@ -63,7 +67,9 @@ h1 {
   border-radius: var(--radius);
   padding: 1.25rem;
   margin-bottom: 1rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .card:hover {
@@ -74,12 +80,6 @@ h1 {
 .card-actions {
   display: flex;
   gap: 0.5rem;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.card:hover .card-actions {
-  opacity: 1;
 }
 
 /* Inputs & Buttons */
@@ -127,6 +127,8 @@ h1 {
   border: none;
   background: transparent;
   gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
 }
 
 .btn:disabled {
@@ -137,8 +139,6 @@ h1 {
 .btn-primary {
   background-color: var(--primary);
   color: white;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.875rem;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -147,7 +147,6 @@ h1 {
 
 .btn-ghost {
   color: var(--text-muted);
-  padding: 0.75rem 1rem;
 }
 
 .btn-ghost:hover {
