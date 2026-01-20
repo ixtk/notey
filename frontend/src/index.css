@@ -139,6 +139,7 @@ h1 {
 .btn-primary {
   background-color: var(--primary);
   color: white;
+  font-family: inherit;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -147,6 +148,7 @@ h1 {
 
 .btn-ghost {
   color: var(--text-muted);
+  font-family: inherit;
 }
 
 .btn-ghost:hover {
