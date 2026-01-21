@@ -42,9 +42,29 @@ function Note({ noteData, notes, setNotes }) {
     const response = await fetch(
       `http://localhost:3000/notes/${noteData._id}`,
       {
-        method: "PUT"
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content: newContent
+        })
       }
     )
+
+    const updatedNote = await response.json()
+
+    const updatedNotes = notes.map(function (note) {
+      if (note._id === noteData._id) {
+        return updatedNote
+      } else {
+        return note
+      }
+    })
+
+    setNotes(updatedNotes)
+
+    setIsEditing(false)
   }
 
   return (

@@ -52,10 +52,17 @@ app.delete("/notes/:noteIdToDelete", async function (request, response) {
   response.json({ message: "Deleted" })
 })
 
+// notes/123
+// notes/abc
 app.put("/notes/:noteIdToEdit", async function (request, response) {
   const noteIdToEdit = request.params.noteIdToEdit
+  const newContent = request.body.content
 
-  console.log(noteIdToEdit)
+  const updatedNote = await NoteModel.findByIdAndUpdate(noteIdToEdit, {
+    content: newContent
+  })
+
+  response.json(updatedNote)
 })
 
 mongoose
