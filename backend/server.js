@@ -58,9 +58,13 @@ app.put("/notes/:noteIdToEdit", async function (request, response) {
   const noteIdToEdit = request.params.noteIdToEdit
   const newContent = request.body.content
 
-  const updatedNote = await NoteModel.findByIdAndUpdate(noteIdToEdit, {
-    content: newContent
-  })
+  const updatedNote = await NoteModel.findByIdAndUpdate(
+    noteIdToEdit,
+    {
+      content: newContent
+    },
+    { new: true }
+  )
 
   response.json(updatedNote)
 })

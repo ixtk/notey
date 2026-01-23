@@ -49,7 +49,7 @@ function App() {
   }
 
   const noteElements = notes.map(function (note) {
-    return <Note noteData={note} notes={notes} setNotes={setNotes} />
+    return <Note key={note._id} noteData={note} notes={notes} setNotes={setNotes} />
   })
 
   return (
