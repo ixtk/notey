@@ -1,6 +1,8 @@
 import express from "express"
 import mongoose from "mongoose"
 import cors from "cors"
+import NoteModel from "./NoteModel.js"
+import { createNewNote, getAllNotes } from "./controllers.js"
 
 const app = express()
 
@@ -12,35 +14,8 @@ app.use(
   })
 )
 
-const NoteSchema = new mongoose.Schema(
-  {
-    content: {
-      type: String,
-      required: true
-    }
-  },
-  { timestamps: true }
-)
-
-const NoteModel = mongoose.model("Note", NoteSchema)
-
-app.get("/notes", async function (request, response) {
-  const notes = await NoteModel.find()
-
-  response.json({ notes: notes })
-})
-
-app.post("/note", async function (request, response) {
-  const newContent = request.body.content
-
-  console.log(newContent)
-
-  const newNote = await NoteModel.create({
-    content: newContent
-  })
-
-  response.status(201).json({ note: newNote })
-})
+app.get("/notes", getAllNotes)
+app.post("/note", createNewNote)
 
 app.delete("/notes/:noteIdToDelete", async function (request, response) {
   const noteIdToDelete = request.params.noteIdToDelete
