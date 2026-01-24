@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { EditIcon, DeleteIcon } from "./Icons"
+import client from "../axiosClient"
 
 function Note({ noteData, notes, setNotes }) {
   const [isEditing, setIsEditing] = useState(false)
@@ -8,12 +9,16 @@ function Note({ noteData, notes, setNotes }) {
   async function deleteNote(noteIdToDelete) {
     console.log("Deleting", noteIdToDelete)
 
+    /*
     const response = await fetch(
       `http://localhost:3000/notes/${noteIdToDelete}`,
       {
         method: "DELETE"
       }
     )
+    */
+
+    const response = await client.delete(`/notes/${noteIdToDelete}`)
 
     // prevNotes.filter(note => note.id !== noteIdToDelete)
 
@@ -39,6 +44,7 @@ function Note({ noteData, notes, setNotes }) {
   async function editNote() {
     console.log("Editing note to:", newContent)
 
+    /*
     const response = await fetch(
       `http://localhost:3000/notes/${noteData._id}`,
       {
@@ -53,6 +59,12 @@ function Note({ noteData, notes, setNotes }) {
     )
 
     const updatedNote = await response.json()
+    */
+    const response = await client.put(`/notes/${noteData._id}`, {
+      content: newContent
+    })
+
+    const updatedNote = response.data
 
     const updatedNotes = notes.map(function (note) {
       if (note._id === noteData._id) {
