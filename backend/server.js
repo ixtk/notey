@@ -14,7 +14,7 @@ app.use(express.json())
 
 app.use(
   cors({
-    origin: "http://localhost:5173"
+    origin: process.env.FRONTEND_URL
   })
 )
 
@@ -24,7 +24,7 @@ app.delete("/notes/:noteIdToDelete", deleteNoteById)
 app.put("/notes/:noteIdToEdit", editNoteById)
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/notey")
+  .connect(process.env.MONGODB_URL)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err))
 

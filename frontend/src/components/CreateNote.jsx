@@ -71,6 +71,7 @@ export function CreateNote(props) {
             style={{ marginLeft: "auto" }}
             onClick={saveNote}
             // disabled={error !== ""}
+            // disabled={error !== "" || newNote.length === 0}
             disabled={newNote.length < 3}
           >
             <AddIcon />
