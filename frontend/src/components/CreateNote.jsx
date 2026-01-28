@@ -4,9 +4,17 @@ import client from "../axiosClient"
 
 export function CreateNote(props) {
   const [newNote, setNewNote] = useState("")
+  const [error, setError] = useState("")
 
   async function saveNote() {
     console.log("Saving", newNote)
+
+    if (newNote.length < 3) {
+      setError("Note must be at least 3 characters long")
+      return
+    } else {
+      setError("")
+    }
 
     /*
     const response = await fetch("http://localhost:3000/note", {
@@ -41,16 +49,29 @@ export function CreateNote(props) {
         <textarea
           value={newNote}
           onChange={function (event) {
+            if (event.target.value.length < 3) {
+              setError("Note must be at least 3 characters long")
+            } else {
+              setError("")
+            }
+
+            // if (event.target.value.length >= 3) {
+            //   setError("")
+            // }
+
             setNewNote(event.target.value)
           }}
           className="textarea"
           placeholder="What's on your mind?"
         />
+        <span style={{ fontSize: "small", color: "red" }}>{error}</span>
         <div className="flex justify-between items-center">
           <button
             className="btn btn-primary"
             style={{ marginLeft: "auto" }}
             onClick={saveNote}
+            // disabled={error !== ""}
+            disabled={newNote.length < 3}
           >
             <AddIcon />
             Add Note
