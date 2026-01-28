@@ -1,8 +1,12 @@
 import express from "express"
 import mongoose from "mongoose"
 import cors from "cors"
-import NoteModel from "./NoteModel.js"
-import { createNewNote, getAllNotes } from "./controllers.js"
+import {
+  createNewNote,
+  deleteNoteById,
+  editNoteById,
+  getAllNotes
+} from "./controllers.js"
 
 const app = express()
 
@@ -16,33 +20,8 @@ app.use(
 
 app.get("/notes", getAllNotes)
 app.post("/note", createNewNote)
-
-app.delete("/notes/:noteIdToDelete", async function (request, response) {
-  const noteIdToDelete = request.params.noteIdToDelete
-
-  console.log(noteIdToDelete)
-
-  await NoteModel.findByIdAndDelete(noteIdToDelete)
-
-  response.json({ message: "Deleted" })
-})
-
-// notes/123
-// notes/abc
-app.put("/notes/:noteIdToEdit", async function (request, response) {
-  const noteIdToEdit = request.params.noteIdToEdit
-  const newContent = request.body.content
-
-  const updatedNote = await NoteModel.findByIdAndUpdate(
-    noteIdToEdit,
-    {
-      content: newContent
-    },
-    { new: true }
-  )
-
-  response.json(updatedNote)
-})
+app.delete("/notes/:noteIdToDelete", deleteNoteById)
+app.put("/notes/:noteIdToEdit", editNoteById)
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/notey")
