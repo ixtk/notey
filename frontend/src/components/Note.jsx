@@ -122,6 +122,7 @@ function Note({ noteData, notes, setNotes }) {
                 onClick={editNote}
                 className="btn btn-primary"
                 title="Save"
+                disabled={newContent.length < 3}
               >
                 Save
               </button>
