@@ -5,6 +5,7 @@ import client from "../axiosClient"
 function Note({ noteData, notes, setNotes }) {
   const [isEditing, setIsEditing] = useState(false)
   const [newContent, setNewContent] = useState(noteData.content)
+  const [error, setError] = useState("")
 
   async function deleteNote(noteIdToDelete) {
     console.log("Deleting", noteIdToDelete)
@@ -38,6 +39,12 @@ function Note({ noteData, notes, setNotes }) {
   }
 
   function handleNoteChange(event) {
+    if (event.target.value.length < 3) {
+      setError("Note must be at least 3 characters long")
+    } else {
+      setError("")
+    }
+
     setNewContent(event.target.value)
   }
 
@@ -60,6 +67,14 @@ function Note({ noteData, notes, setNotes }) {
 
     const updatedNote = await response.json()
     */
+
+    if (newContent.length < 3) {
+      setError("Note must be at least 3 characters long")
+      return
+    } else {
+      setError("")
+    }
+
     const response = await client.put(`/notes/${noteData._id}`, {
       content: newContent
     })
@@ -82,9 +97,12 @@ function Note({ noteData, notes, setNotes }) {
   return (
     <div className="card">
       {isEditing === true ? (
-        <textarea onChange={handleNoteChange} className="textarea">
-          {noteData.content}
-        </textarea>
+        <>
+          <textarea onChange={handleNoteChange} className="textarea">
+            {noteData.content}
+          </textarea>
+          <span style={{ fontSize: "small", color: "red" }}>{error}</span>
+        </>
       ) : (
         <div className="note-content mb-4">{noteData.content}</div>
       )}
