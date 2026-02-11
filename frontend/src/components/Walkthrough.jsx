@@ -2,7 +2,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { useState } from "react"
 
-export function Walkthrough({ onClose }) {
+export function Walkthrough() {
   const [activeSection, setActiveSection] = useState("overview")
 
   const sections = [
@@ -50,33 +50,21 @@ export function Walkthrough({ onClose }) {
   )
 
   return (
-    <div className="layout">
-      <nav className="nav">
-        <div className="container nav-content" style={{ maxWidth: "1200px" }}>
-          <span className="logo" style={{ cursor: "default" }}>
-            notey.
-          </span>
-          <button className="btn btn-ghost" onClick={onClose} type="button">
-            Back to App
-          </button>
-        </div>
-      </nav>
-
-      <div
-        className="container"
+    <div
+      className="container"
+      style={{
+        maxWidth: "1200px",
+        display: "flex",
+        gap: "2rem",
+        alignItems: "flex-start"
+      }}
+    >
+      {/* Sidebar Navigation */}
+      <aside
         style={{
-          maxWidth: "1200px",
-          display: "flex",
-          gap: "2rem",
-          alignItems: "flex-start"
-        }}
-      >
-        {/* Sidebar Navigation */}
-        <aside
-          style={{
-            width: "220px",
-            position: "sticky",
-            top: "100px",
+          width: "220px",
+          position: "sticky",
+          top: "100px",
             flexShrink: 0
           }}
         >
@@ -1387,6 +1375,5 @@ npm run dev
           )}
         </main>
       </div>
-    </div>
   )
 }

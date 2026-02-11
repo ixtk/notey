@@ -86,10 +86,10 @@ h1 {
 .input,
 .textarea {
   width: 100%;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   background-color: var(--bg);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   font-family: inherit;
   font-size: 1rem;
   color: inherit;
@@ -250,4 +250,70 @@ h1 {
   font-size: 1.125rem;
   line-height: 1.75;
   color: var(--text);
+}
+
+/* Auth forms */
+.auth-container {
+  max-width: 500px;
+}
+
+.auth-card {
+  margin-top: 2rem;
+}
+
+.auth-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.password-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.padding-top-2 {
+  padding-top: 2rem;
+}
+
+.padding-bottom-2 {
+  padding-bottom: 2rem;
+}
+
+.margin-top-half {
+  margin-top: 0.5rem;
+}
+
+.no-notes {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.page-subtitle {
+  padding: 0 0.5rem 2rem;
 }
