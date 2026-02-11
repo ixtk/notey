@@ -1,10 +1,13 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import client from "../axiosClient"
 
 export function Register() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   function handleEmailChange(e) {
     setEmail(e.target.value)
@@ -18,8 +21,39 @@ export function Register() {
     setConfirmPassword(e.target.value)
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
+
+    setError("")
+
+    if (email.trim().length < 3) {
+      setError("Email is too short")
+      return
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      await client.post("/register", {
+        email: email,
+        password: password
+      })
+    } catch (requestError) {
+      const message = requestError?.response?.data?.message
+      setError(message || "Registration failed")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -68,9 +102,15 @@ export function Register() {
 
           <div>
             <button type="submit" className="btn btn-primary margin-top-half">
-              Register
+              {isSubmitting ? "Registering..." : "Register"}
             </button>
           </div>
+
+          {error !== "" && (
+            <div className="text-sm" style={{ color: "red" }}>
+              {error}
+            </div>
+          )}
 
           <div className="margin-top-half">
             <span className="text-muted text-sm">Already have an account? </span>

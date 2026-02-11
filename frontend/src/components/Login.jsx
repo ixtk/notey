@@ -1,9 +1,12 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import client from "../axiosClient"
 
 export function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   function handleEmailChange(e) {
     setEmail(e.target.value)
@@ -13,8 +16,34 @@ export function Login() {
     setPassword(e.target.value)
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
+
+    setError("")
+
+    if (email.trim().length < 3) {
+      setError("Email is too short")
+      return
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6")
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      await client.post("/login", {
+        email: email,
+        password: password
+      })
+    } catch (requestError) {
+      const message = requestError?.response?.data?.message
+      setError(message || "Login failed")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -50,9 +79,15 @@ export function Login() {
 
           <div>
             <button type="submit" className="btn btn-primary margin-top-half">
-              Login
+              {isSubmitting ? "Logging in..." : "Login"}
             </button>
           </div>
+
+          {error !== "" && (
+            <div className="text-sm" style={{ color: "red" }}>
+              {error}
+            </div>
+          )}
 
           <div className="margin-top-half">
             <span className="text-muted text-sm">Don't have an account? </span>

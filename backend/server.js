@@ -5,7 +5,9 @@ import {
   createNewNote,
   deleteNoteById,
   editNoteById,
-  getAllNotes
+  getAllNotes,
+  loginUser,
+  registerUser
 } from "./controllers.js"
 
 import dotenv from "dotenv"
@@ -26,12 +28,20 @@ app.get("/notes", getAllNotes)
 app.post("/note", createNewNote)
 app.delete("/notes/:noteIdToDelete", deleteNoteById)
 app.put("/notes/:noteIdToEdit", editNoteById)
+app.post("/register", registerUser)
+app.post("/login", loginUser)
 
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error(err))
+async function startServer() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URL)
+    console.log("MongoDB connected")
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000")
-})
+    app.listen(3000, () => {
+      console.log("Server running on port 3000")
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+startServer()
