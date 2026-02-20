@@ -63,6 +63,88 @@ function getTotalPrice(quantity, price) {
 
 // getTotalPrice(3, 5)
 
-function summary(name, age) {
+// function summary(name, age) {
+//   console.log("My name is", name, "age is", age)
+// }
+
+const summary = (name, age) => {
   console.log("My name is", name, "age is", age)
 }
+
+// hobbies, hobby -> "I like" + hobby
+
+// hobbies("reading")
+
+// function hobbies(hobby) {
+//   console.log("I like " + hobby)
+// }
+
+// arrow function
+const hobbies = (hobby) => {
+  console.log("I like " + hobby)
+}
+
+hobbies("reading")
+
+// user; name, email, address (object) -> city
+
+const User = {
+  name: "Tako",
+  email: "tako@example.com",
+  address: {
+    city: "Tbilisi"
+  }
+}
+
+// console.log(User.address.city)
+
+// filter
+
+const posts = [
+  { title: "Post 1", author: "Sarah", likes: 3 },
+  { title: "Post 2", author: "Mike", likes: 18 },
+  { title: "Post 3", author: "Sarah", likes: 23 }
+]
+
+const authors = posts.map(function (p) {
+  return p.author.toUpperCase()
+})
+
+// console.log(authors)
+
+const postsBySarah = posts.filter(function(p) {
+  // console.log('current post is', p)
+
+  if (p.author === "Sarah") {
+    return true
+  } else {
+    return false
+  }
+})
+
+// const likedPosts = posts.filter(function (p) {
+//   return p.likes > 10
+
+//   // if (p.likes > 10) {
+//   //   return true
+//   // } else {
+//   //   return false
+//   // }
+// })
+
+const likedPosts = posts.filter((p) => {
+  return p.likes > 10
+})
+
+const numbers = [1, 2, 3, 4]
+
+const doubleNumbers = numbers.map(function(n) {
+  return n * 2
+})
+
+// console.log(doubleNumbers)
+
+// console.log(likedPosts)
+// console.log(postsBySarah)
+
+// filter posts with more than 10 likes
