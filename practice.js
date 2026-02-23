@@ -122,19 +122,19 @@ const postsBySarah = posts.filter(function(p) {
   }
 })
 
-// const likedPosts = posts.filter(function (p) {
-//   return p.likes > 10
+const likedPosts = posts.filter(function (p) {
+  // return p.likes > 10
 
-//   // if (p.likes > 10) {
-//   //   return true
-//   // } else {
-//   //   return false
-//   // }
-// })
-
-const likedPosts = posts.filter((p) => {
-  return p.likes > 10
+  if (p.likes > 10) {
+    return true
+  } else {
+    return false
+  }
 })
+
+// const likedPosts = posts.filter((p) => {
+//   return p.likes > 10
+// })
 
 const numbers = [1, 2, 3, 4]
 
@@ -142,7 +142,7 @@ const doubleNumbers = numbers.map(function(n) {
   return n * 2
 })
 
-// console.log(doubleNumbers)
+console.log(doubleNumbers)
 
 // console.log(likedPosts)
 // console.log(postsBySarah)

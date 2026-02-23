@@ -7,6 +7,7 @@ export function Login() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loggedInUser, setLoggedInUser] = useState("")
 
   function handleEmailChange(e) {
     setEmail(e.target.value)
@@ -34,10 +35,15 @@ export function Login() {
     setIsSubmitting(true)
 
     try {
-      await client.post("/login", {
+      const response = await client.post("/login", {
         email: email,
         password: password
       })
+
+      // const returnedData = response.data
+      // response.data -> backend information
+
+      setLoggedInUser(response.data.user.email)
     } catch (requestError) {
       const message = requestError?.response?.data?.message
       setError(message || "Login failed")
@@ -49,6 +55,7 @@ export function Login() {
   return (
     <main className="container auth-container">
       <div className="card auth-card">
+        <h3>{loggedInUser}</h3>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="flex flex-col gap-2">
             <label htmlFor="email" className="font-medium text-sm">
