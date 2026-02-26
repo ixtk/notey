@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs"
 import { NoteModel } from "./NoteModel.js"
 import { UserModel } from "./UserModel.js"
+import jwt from "jsonwebtoken"
+
 
 export async function getAllNotes(request, response) {
   const notes = await NoteModel.find()
@@ -125,6 +127,16 @@ export async function loginUser(request, response) {
   if (!isMatch) {
     return response.status(401).json({ message: "Invalid credentials" })
   }
+
+  const token = jwt.sign(
+    { userId: user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  )
+
+  response.cookie("token", token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  })
 
   response.json({
     user: {
