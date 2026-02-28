@@ -145,3 +145,24 @@ export async function loginUser(request, response) {
     }
   })
 }
+
+export async function getCurrentUser(request, response) {
+  try {
+    const token = request.cookies.token
+
+    // token === undefined || token === null || token === ""
+
+    if (!token) {
+      return response.status(401).json({ message: "Not authenticated" })
+    }
+
+    // { "userId": "699fbcb9efe07d6535372d4c", ... }
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+    const user = await UserModel.findById(decodedToken.userId)
+
+    return response.json({ email: user.email })
+  } catch (error) {
+    return response.status(401).json({ message: "Invalid token" })
+  }
+}

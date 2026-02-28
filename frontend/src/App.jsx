@@ -11,6 +11,9 @@ import client from "./axiosClient"
 function HomePage() {
   const [notes, setNotes] = useState([])
 
+  // null = user is NOT logged in
+  const [loggedInUser, setLoggedInUser] = useState(null)
+
   useEffect(function () {
     async function getNotes() {
       // const response = await fetch("http://localhost:3000/notes")
@@ -24,6 +27,18 @@ function HomePage() {
       setNotes(json.notes)
     }
 
+    async function getCurrentUser() {
+      const response = await client.get("/profile")
+      const json = response.data
+
+      if (json.email) {
+        setLoggedInUser(json.email)
+      }
+
+      console.log(json)
+    }
+
+    getCurrentUser()
     getNotes()
   }, [])
 
@@ -39,12 +54,14 @@ function HomePage() {
         <p className="text-muted">Capture ideas, lists, and thoughts.</p>
       </div>
 
-      <CreateNote setNotes={setNotes} notes={notes} />
+      {loggedInUser !== null ? (
+        <CreateNote setNotes={setNotes} notes={notes} />
+      ) : (
+        <p>Login to create a note</p>
+      )}
 
       {notes.length === 0 && (
-        <div className="text-muted no-notes">
-          No notes found.
-        </div>
+        <div className="text-muted no-notes">No notes found.</div>
       )}
 
       {notes.length > 0 && <div className="note-list">{noteElements}</div>}
