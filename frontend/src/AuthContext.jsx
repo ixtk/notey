@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react"
 import client from "./axiosClient"
 
-const AuthContext = createContext(null)
+export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null)

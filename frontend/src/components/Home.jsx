@@ -1,7 +1,7 @@
-import client from "./axiosClient"
+import client from "../axiosClient"
 import { useState, useEffect } from "react"
-import Note from "./components/Note"
-import { CreateNote } from "./components/CreateNote"
+import Note from "./Note"
+import { CreateNote } from "./CreateNote"
 
 export function HomePage() {
   const [notes, setNotes] = useState([])

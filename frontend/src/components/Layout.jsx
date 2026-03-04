@@ -1,6 +1,10 @@
 import { Outlet, Link } from "react-router-dom"
+import { useContext } from "react"
+import { AuthContext } from "../AuthContext"
 
 export function Layout() {
+  const { loggedInUser } = useContext(AuthContext)
+
   return (
     <div className="layout">
       <nav className="nav">
@@ -16,12 +20,21 @@ export function Layout() {
             <Link to="/walkthrough" className="nav-link">
               Walkthrough
             </Link>
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-            <Link to="/register" className="nav-link">
-              Register
-            </Link>
+
+            {loggedInUser === null ? (
+              <>
+                <Link to="/login" className="nav-link">
+                  Login
+                </Link>
+                <Link to="/register" className="nav-link">
+                  Register
+                </Link>
+              </>
+            ) : (
+              <Link to="/logout" className="nav-link">
+                Logout
+              </Link>
+            )}
             {/* <div className="search-container">
               <div className="search-icon">
                 <svg
