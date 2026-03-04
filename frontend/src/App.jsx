@@ -54,10 +54,10 @@ function HomePage() {
         <p className="text-muted">Capture ideas, lists, and thoughts.</p>
       </div>
 
-      {loggedInUser !== null ? (
-        <CreateNote setNotes={setNotes} notes={notes} />
-      ) : (
+      {loggedInUser === null ? (
         <p>Login to create a note</p>
+      ) : (
+        <CreateNote setNotes={setNotes} notes={notes} />
       )}
 
       {notes.length === 0 && (
