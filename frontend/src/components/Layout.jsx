@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { AuthContext } from "../AuthContext"
 
 export function Layout() {
-  const { loggedInUser } = useContext(AuthContext)
+  const { loggedInUser, logout } = useContext(AuthContext)
 
   return (
     <div className="layout">
@@ -31,9 +31,9 @@ export function Layout() {
                 </Link>
               </>
             ) : (
-              <Link to="/logout" className="nav-link">
+              <button onClick={logout} className="btn btn-primary">
                 Logout
-              </Link>
+              </button>
             )}
             {/* <div className="search-container">
               <div className="search-icon">

@@ -8,7 +8,8 @@ import {
   getAllNotes,
   loginUser,
   registerUser,
-  getCurrentUser
+  getCurrentUser,
+  logoutUser
 } from "./controllers.js"
 import cookieParser from "cookie-parser"
 
@@ -35,6 +36,7 @@ app.put("/notes/:noteIdToEdit", editNoteById)
 app.post("/register", registerUser)
 app.post("/login", loginUser)
 app.get("/profile", getCurrentUser)
+app.post("/logout", logoutUser)
 
 async function startServer() {
   try {

@@ -1,11 +1,14 @@
 import { useState } from "react"
 import { EditIcon, DeleteIcon } from "./Icons"
 import client from "../axiosClient"
+import { useContext } from "react"
+import { AuthContext } from "../AuthContext"
 
 function Note({ noteData, notes, setNotes }) {
   const [isEditing, setIsEditing] = useState(false)
   const [newContent, setNewContent] = useState(noteData.content)
   const [error, setError] = useState("")
+  const { loggedInUser } = useContext(AuthContext)
 
   async function deleteNote(noteIdToDelete) {
     console.log("Deleting", noteIdToDelete)
@@ -107,48 +110,50 @@ function Note({ noteData, notes, setNotes }) {
         <div className="note-content mb-4">{noteData.content}</div>
       )}
 
-      <div className="flex justify-between items-center">
-        <div className="card-actions">
-          {isEditing === true ? (
-            <>
-              <button
-                onClick={cancelEdit}
-                className="btn btn-ghost"
-                title="Cancel"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={editNote}
-                className="btn btn-primary"
-                title="Save"
-                disabled={newContent.length < 3}
-              >
-                Save
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={function () {
-                  setIsEditing(true)
-                }}
-                className="btn btn-ghost"
-                title="Edit"
-              >
-                <EditIcon />
-              </button>
-              <button
-                onClick={() => deleteNote(noteData._id)}
-                className="btn btn-ghost danger"
-                title="Delete"
-              >
-                <DeleteIcon />
-              </button>
-            </>
-          )}
+      {loggedInUser !== null && (
+        <div className="flex justify-between items-center">
+          <div className="card-actions">
+            {isEditing === true ? (
+              <>
+                <button
+                  onClick={cancelEdit}
+                  className="btn btn-ghost"
+                  title="Cancel"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={editNote}
+                  className="btn btn-primary"
+                  title="Save"
+                  disabled={newContent.length < 3}
+                >
+                  Save
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={function () {
+                    setIsEditing(true)
+                  }}
+                  className="btn btn-ghost"
+                  title="Edit"
+                >
+                  <EditIcon />
+                </button>
+                <button
+                  onClick={() => deleteNote(noteData._id)}
+                  className="btn btn-ghost danger"
+                  title="Delete"
+                >
+                  <DeleteIcon />
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

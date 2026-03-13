@@ -166,3 +166,9 @@ export async function getCurrentUser(request, response) {
     return response.status(401).json({ message: "Invalid token" })
   }
 }
+
+export async function logoutUser(request, response) {
+  response.clearCookie("token")
+  
+  response.json({ message: "Logged out" })
+}

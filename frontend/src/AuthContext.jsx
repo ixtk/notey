@@ -24,6 +24,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     const response = await client.post("/logout")
+    setLoggedInUser(null)
   }
 
   useEffect(function () {
