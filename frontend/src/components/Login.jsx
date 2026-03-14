@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import client from "../axiosClient"
+import { useContext } from "react"
+import { AuthContext } from "../AuthContext"
 
 export function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [loggedInUser, setLoggedInUser] = useState("")
+  const { loggedInUser, login } = useContext(AuthContext)
 
   function handleEmailChange(e) {
     setEmail(e.target.value)
@@ -35,15 +36,7 @@ export function Login() {
     setIsSubmitting(true)
 
     try {
-      const response = await client.post("/login", {
-        email: email,
-        password: password
-      })
-
-      // const returnedData = response.data
-      // response.data -> backend information
-
-      setLoggedInUser(response.data.user.email)
+      login(email, password)
     } catch (requestError) {
       const message = requestError?.response?.data?.message
       setError(message || "Login failed")

@@ -2,12 +2,12 @@ import client from "../axiosClient"
 import { useState, useEffect } from "react"
 import Note from "./Note"
 import { CreateNote } from "./CreateNote"
+import { useContext } from "react"
+import { AuthContext } from "../AuthContext"
 
 export function HomePage() {
   const [notes, setNotes] = useState([])
-
-  // null = user is NOT logged in
-  const [loggedInUser, setLoggedInUser] = useState(null)
+  const { loggedInUser } = useContext(AuthContext)
 
   useEffect(function () {
     async function getNotes() {
@@ -21,19 +21,6 @@ export function HomePage() {
 
       setNotes(json.notes)
     }
-
-    async function getCurrentUser() {
-      const response = await client.get("/profile")
-      const json = response.data
-
-      if (json.email) {
-        setLoggedInUser(json.email)
-      }
-
-      console.log(json)
-    }
-
-    getCurrentUser()
     getNotes()
   }, [])
 

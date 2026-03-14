@@ -5,6 +5,7 @@ import { Login } from "./components/Login"
 import { Register } from "./components/Register"
 import { HomePage } from "./components/Home"
 import { AuthProvider } from "./AuthContext"
+import { RedirectIfLoggedIn } from "./components/RedirectIfLoggedIn"
 
 function App() {
   return (
@@ -14,8 +15,11 @@ function App() {
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="walkthrough" element={<Walkthrough />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+
+            <Route element={<RedirectIfLoggedIn />}>
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>

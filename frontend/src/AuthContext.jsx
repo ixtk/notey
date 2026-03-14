@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from "react"
 import client from "./axiosClient"
+import { useNavigate } from "react-router-dom"
 
 export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null)
+  const navigate = useNavigate()
 
   async function login(email, password) {
     const response = await client.post("/login", {
@@ -13,6 +15,7 @@ export function AuthProvider({ children }) {
     })
 
     setLoggedInUser(response.data.user.email)
+    navigate("/")
   }
 
   async function register(email, password) {
@@ -20,6 +23,7 @@ export function AuthProvider({ children }) {
       email: email,
       password: password
     })
+    navigate("/login")
   }
 
   async function logout() {
