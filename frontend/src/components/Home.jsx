@@ -7,7 +7,7 @@ import { AuthContext } from "../AuthContext"
 
 export function HomePage() {
   const [notes, setNotes] = useState([])
-  const { loggedInUser } = useContext(AuthContext)
+  const { loggedInUser, loading } = useContext(AuthContext)
 
   useEffect(function () {
     async function getNotes() {
@@ -36,7 +36,9 @@ export function HomePage() {
         <p className="text-muted">Capture ideas, lists, and thoughts.</p>
       </div>
 
-      {loggedInUser === null ? (
+      {loading === true ? (
+        <p>Loading...</p>
+      ) : loggedInUser === null ? (
         <p>Login to create a note</p>
       ) : (
         <CreateNote setNotes={setNotes} notes={notes} />

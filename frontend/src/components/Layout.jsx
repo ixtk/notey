@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { AuthContext } from "../AuthContext"
 
 export function Layout() {
-  const { loggedInUser, logout } = useContext(AuthContext)
+  const { loggedInUser, loading, logout } = useContext(AuthContext)
 
   return (
     <div className="layout">
@@ -21,20 +21,27 @@ export function Layout() {
               Walkthrough
             </Link>
 
-            {loggedInUser === null ? (
-              <>
-                <Link to="/login" className="nav-link">
-                  Login
-                </Link>
-                <Link to="/register" className="nav-link">
-                  Register
-                </Link>
-              </>
-            ) : (
-              <button onClick={logout} className="btn btn-primary">
-                Logout
-              </button>
-            )}
+            <div className="auth-actions-slot">
+              {loading ? (
+                <>
+                  <span className="auth-action-skeleton auth-action-skeleton-login" aria-hidden="true" />
+                  <span className="auth-action-skeleton auth-action-skeleton-register" aria-hidden="true" />
+                </>
+              ) : loggedInUser === null ? (
+                <>
+                  <Link to="/login" className="nav-link">
+                    Login
+                  </Link>
+                  <Link to="/register" className="nav-link">
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <button onClick={logout} className="btn btn-primary auth-logout-btn">
+                  Logout
+                </button>
+              )}
+            </div>
             {/* <div className="search-container">
               <div className="search-icon">
                 <svg

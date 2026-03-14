@@ -283,6 +283,51 @@ h1 {
   font-size: 0.875rem;
 }
 
+@keyframes nav-link-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.nav-link-loading {
+  pointer-events: none;
+  cursor: default;
+  animation: nav-link-pulse 1.2s ease-in-out infinite;
+}
+
+.auth-actions-slot {
+  min-width: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.auth-action-skeleton {
+  display: inline-block;
+  height: 14px;
+  border-radius: 9999px;
+  background-color: var(--border);
+  animation: nav-link-pulse 1.2s ease-in-out infinite;
+}
+
+.auth-action-skeleton-login {
+  width: 36px;
+}
+
+.auth-action-skeleton-register {
+  width: 56px;
+}
+
+.auth-logout-btn {
+  min-width: 110px;
+}
+
 .nav-link:hover {
   color: var(--text);
 }

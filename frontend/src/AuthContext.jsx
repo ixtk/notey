@@ -6,6 +6,7 @@ export const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   async function login(email, password) {
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
         setLoggedInUser(json.email)
       }
 
+      setLoading(false)
       console.log(json)
     }
 
@@ -47,7 +49,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ loggedInUser, login, register, logout }}>
+    <AuthContext.Provider value={{ loggedInUser, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
