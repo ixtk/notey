@@ -13,6 +13,10 @@ export async function getAllNotes(request, response) {
 export async function createNewNote(request, response) {
   const newContent = request.body.content
 
+  if (!newContent) {
+    return response.status(400).json({ message: "content attribute is required" })
+  }
+  
   console.log(newContent, typeof newContent, newContent.length)
 
   if (typeof newContent !== "string") {
