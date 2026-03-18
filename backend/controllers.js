@@ -167,6 +167,25 @@ export async function getCurrentUser(request, response) {
   }
 }
 
+export async function checkAuth(request, response, next) {
+  try {
+    const token = request.cookies.token
+
+    // token === undefined || token === null || token === ""
+
+    if (!token) {
+      return response.status(401).json({ message: "Not authenticated" })
+    }
+
+    // { "userId": "699fbcb9efe07d6535372d4c", ... }
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+    next()
+  } catch (error) {
+    return response.status(401).json({ message: "Invalid token" })
+  }
+}
+
 export async function logoutUser(request, response) {
   response.clearCookie("token")
   

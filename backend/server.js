@@ -9,7 +9,8 @@ import {
   loginUser,
   registerUser,
   getCurrentUser,
-  logoutUser
+  logoutUser,
+  checkAuth
 } from "./controllers.js"
 import cookieParser from "cookie-parser"
 
@@ -30,9 +31,9 @@ app.use(
 )
 
 app.get("/notes", getAllNotes)
-app.post("/note", createNewNote)
-app.delete("/notes/:noteIdToDelete", deleteNoteById)
-app.put("/notes/:noteIdToEdit", editNoteById)
+app.post("/note", checkAuth, createNewNote)
+app.delete("/notes/:noteIdToDelete", checkAuth, deleteNoteById)
+app.put("/notes/:noteIdToEdit", checkAuth, editNoteById)
 app.post("/register", registerUser)
 app.post("/login", loginUser)
 app.get("/profile", getCurrentUser)
