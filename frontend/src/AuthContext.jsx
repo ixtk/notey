@@ -34,22 +34,29 @@ export function AuthProvider({ children }) {
 
   useEffect(function () {
     async function getCurrentUser() {
-      const response = await client.get("/profile")
-      const json = response.data
+      try {
+        const response = await client.get("/profile")
+        const json = response.data
 
-      if (json.email) {
-        setLoggedInUser(json.email)
+        if (json.email) {
+          setLoggedInUser(json.email)
+        }
+
+        setLoading(false)
+        console.log(json)
+      } catch (error) {
+        console.log(error)
+        setLoading(false)
       }
-
-      setLoading(false)
-      console.log(json)
     }
 
     getCurrentUser()
   }, [])
 
   return (
-    <AuthContext.Provider value={{ loggedInUser, loading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ loggedInUser, loading, login, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   )
