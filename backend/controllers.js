@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 
 
 export async function getAllNotes(request, response) {
-  const notes = await NoteModel.find()
+  const notes = await NoteModel.find().populate("userId", "email")
 
   response.json({ notes: notes })
 }
@@ -30,7 +30,8 @@ export async function createNewNote(request, response) {
   console.log(newContent)
 
   const newNote = await NoteModel.create({
-    content: newContent
+    content: newContent,
+    userId: request.userId
   })
 
   response.status(201).json({ note: newNote })
@@ -183,6 +184,8 @@ export async function checkAuth(request, response, next) {
 
     // { "userId": "699fbcb9efe07d6535372d4c", ... }
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+
+    request.userId = decodedToken.userId
 
     next()
   } catch (error) {

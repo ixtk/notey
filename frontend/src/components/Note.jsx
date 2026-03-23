@@ -154,6 +154,8 @@ function Note({ noteData, notes, setNotes }) {
           </div>
         </div>
       )}
+
+      <p>{noteData.userId?.email}</p>
     </div>
   )
 }
