@@ -24,8 +24,14 @@ export function Layout() {
             <div className="auth-actions-slot">
               {loading ? (
                 <>
-                  <span className="auth-action-skeleton auth-action-skeleton-login" aria-hidden="true" />
-                  <span className="auth-action-skeleton auth-action-skeleton-register" aria-hidden="true" />
+                  <span
+                    className="auth-action-skeleton auth-action-skeleton-login"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="auth-action-skeleton auth-action-skeleton-register"
+                    aria-hidden="true"
+                  />
                 </>
               ) : loggedInUser === null ? (
                 <>
@@ -37,9 +43,15 @@ export function Layout() {
                   </Link>
                 </>
               ) : (
-                <button onClick={logout} className="btn btn-primary auth-logout-btn">
-                  Logout
-                </button>
+                <div>
+                  <p>{loggedInUser}</p>
+                  <button
+                    onClick={logout}
+                    className="btn btn-primary auth-logout-btn"
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
             </div>
             {/* <div className="search-container">
