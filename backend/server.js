@@ -30,7 +30,7 @@ app.use(
   })
 )
 
-app.get("/notes", getAllNotes)
+app.get("/notes", checkAuth, getAllNotes)
 app.post("/note", checkAuth, createNewNote)
 app.delete("/notes/:noteIdToDelete", checkAuth, deleteNoteById)
 app.put("/notes/:noteIdToEdit", checkAuth, editNoteById)

@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 
 
 export async function getAllNotes(request, response) {
-  const notes = await NoteModel.find().populate("userId", "email")
+  const notes = await NoteModel.find({ userId: request.userId }).populate("userId", "email")
 
   response.json({ notes: notes })
 }
@@ -40,9 +40,13 @@ export async function createNewNote(request, response) {
 export const deleteNoteById = async function (request, response) {
   const noteIdToDelete = request.params.noteIdToDelete
 
-  console.log(noteIdToDelete)
+  const note = await NoteModel.findById(noteIdToDelete)
 
-  await NoteModel.findByIdAndDelete(noteIdToDelete)
+  if (request.userId !== note.userId.toString()) {
+    return response.status(403).json({ message: "Not authorized" })
+  }
+
+  await note.deleteOne()
 
   response.json({ message: "Deleted" })
 }
@@ -54,7 +58,7 @@ export const editNoteById = async function (request, response) {
   const note = await NoteModel.findById(noteIdToEdit)
 
   if (request.userId !== note.userId.toString()) {
-    return response.status(403).json({ message: "Not authorized.." })
+    return response.status(403).json({ message: "Not authorized" })
   }
 
   if (typeof newContent !== "string") {
