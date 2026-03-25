@@ -110,51 +110,53 @@ function Note({ noteData, notes, setNotes }) {
         <div className="note-content mb-4">{noteData.content}</div>
       )}
 
-      {loggedInUser !== null && (
-        <div className="flex justify-between items-center">
-          <div className="card-actions">
-            {isEditing === true ? (
-              <>
-                <button
-                  onClick={cancelEdit}
-                  className="btn btn-ghost"
-                  title="Cancel"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={editNote}
-                  className="btn btn-primary"
-                  title="Save"
-                  disabled={newContent.length < 3}
-                >
-                  Save
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={function () {
-                    setIsEditing(true)
-                  }}
-                  className="btn btn-ghost"
-                  title="Edit"
-                >
-                  <EditIcon />
-                </button>
-                <button
-                  onClick={() => deleteNote(noteData._id)}
-                  className="btn btn-ghost danger"
-                  title="Delete"
-                >
-                  <DeleteIcon />
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* logged in + note author */}
+      {loggedInUser !== null && loggedInUser === noteData.userId?.email && (
+            <div className="flex justify-between items-center">
+              <div className="card-actions">
+                {isEditing === true ? (
+                  <>
+                    <button
+                      onClick={cancelEdit}
+                      className="btn btn-ghost"
+                      title="Cancel"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={editNote}
+                      className="btn btn-primary"
+                      title="Save"
+                      disabled={newContent.length < 3}
+                    >
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={function () {
+                        setIsEditing(true)
+                      }}
+                      className="btn btn-ghost"
+                      title="Edit"
+                    >
+                      <EditIcon />
+                    </button>
+                    <button
+                      onClick={() => deleteNote(noteData._id)}
+                      className="btn btn-ghost danger"
+                      title="Delete"
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
 
+      {/* note author email */}
       <p>{noteData.userId?.email}</p>
     </div>
   )

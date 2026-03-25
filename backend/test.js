@@ -13,12 +13,12 @@ fetch("http://localhost:3000/notes/69c0b76341ff83f5f10a5e75", {
     "sec-fetch-site": "same-site",
     "sec-gpc": "1",
     cookie:
-      "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTlmYmNiOWVmZTA3ZDY1MzUzNzJkNGMiLCJpYXQiOjE3NzQyMzcwNDUsImV4cCI6MTc3NDg0MTg0NX0.U3YZrPQaMx-uiqAfgG9LJ6D69gRnRPa92OI7-c9G81Y",
+      "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OWMzNTQwNDcwNzhjYTczMGU3Yzk0NmMiLCJpYXQiOjE3NzQ0MDg3MjgsImV4cCI6MTc3NTAxMzUyOH0.MrNZlxq9jrQiGp7VwDBU022OUU-_jkKlh5bUs4rb0Fw",
     Referer: "http://localhost:5173/"
   },
   body: '{"content":"abcd"}',
   method: "PUT"
 })
-.then((response) => response.json())
-.then((data) => console.log(data))
-.catch((error) => console.error(error))
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error))

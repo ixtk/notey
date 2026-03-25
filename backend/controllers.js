@@ -51,6 +51,12 @@ export const editNoteById = async function (request, response) {
   const noteIdToEdit = request.params.noteIdToEdit
   const newContent = request.body.content
 
+  const note = await NoteModel.findById(noteIdToEdit)
+
+  if (request.userId !== note.userId.toString()) {
+    return response.status(403).json({ message: "Not authorized.." })
+  }
+
   if (typeof newContent !== "string") {
     return response
       .status(400)
@@ -61,15 +67,10 @@ export const editNoteById = async function (request, response) {
       .json({ message: "Note length must be at least 3" })
   }
 
-  const updatedNote = await NoteModel.findByIdAndUpdate(
-    noteIdToEdit,
-    {
-      content: newContent
-    },
-    { new: true }
-  )
+  note.content = newContent
+  await note.save()
 
-  response.json(updatedNote)
+  response.json(note)
 }
 
 export async function registerUser(request, response) {
