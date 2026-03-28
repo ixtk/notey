@@ -8,6 +8,7 @@ import { AuthContext } from "../AuthContext"
 export function HomePage() {
   const [notes, setNotes] = useState([])
   const { loggedInUser, loading } = useContext(AuthContext)
+  const [searchTerm, setSearchTerm] = useState(null)
 
   useEffect(function () {
     async function getNotes() {
@@ -24,7 +25,15 @@ export function HomePage() {
     getNotes()
   }, [])
 
-  const noteElements = notes.map(function (note) {
+  const filteredNotes = notes.filter(function (note) {
+    if (note.content.includes(searchTerm)) {
+      return true
+    } else {
+      return false
+    }
+  })
+
+  const noteElements = filteredNotes.map(function (note) {
     return (
       <Note key={note._id} noteData={note} notes={notes} setNotes={setNotes} />
     )
@@ -32,6 +41,15 @@ export function HomePage() {
 
   return (
     <main className="container">
+      <input
+        onChange={function (event) {
+          setSearchTerm(event.target.value)
+        }}
+        type="search"
+        className="input"
+        placeholder="Search notes..."
+      />
+
       <div className="page-subtitle">
         <p className="text-muted">Capture ideas, lists, and thoughts.</p>
       </div>
