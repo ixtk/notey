@@ -12,6 +12,7 @@ export async function getAllNotes(request, response) {
 
 export async function createNewNote(request, response) {
   const newContent = request.body.content
+  const imageUrl = request.body.imageUrl
 
   if (!newContent) {
     return response.status(400).json({ message: "content attribute is required" })
@@ -27,10 +28,15 @@ export async function createNewNote(request, response) {
     return response.status(400).json({ message: "Note length must be at least 3" })
   }
 
+  if (imageUrl !== undefined && typeof imageUrl !== "string") {
+    return response.status(400).json({ message: "imageUrl must be a string" })
+  }
+
   console.log(newContent)
 
   const newNote = await NoteModel.create({
     content: newContent,
+    imageUrl: imageUrl ?? "",
     userId: request.userId
   })
 

@@ -8,7 +8,7 @@ import { AuthContext } from "../AuthContext"
 export function HomePage() {
   const [notes, setNotes] = useState([])
   const { loggedInUser, loading } = useContext(AuthContext)
-  const [searchTerm, setSearchTerm] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(function () {
     async function getNotes() {
@@ -25,12 +25,10 @@ export function HomePage() {
     getNotes()
   }, [])
 
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase()
+
   const filteredNotes = notes.filter(function (note) {
-    if (note.content.includes(searchTerm)) {
-      return true
-    } else {
-      return false
-    }
+    return note.content.toLowerCase().includes(normalizedSearchTerm)
   })
 
   const noteElements = filteredNotes.map(function (note) {
@@ -62,11 +60,11 @@ export function HomePage() {
         <CreateNote setNotes={setNotes} notes={notes} />
       )}
 
-      {notes.length === 0 && (
+      {filteredNotes.length === 0 && (
         <div className="text-muted no-notes">No notes found.</div>
       )}
 
-      {notes.length > 0 && <div className="note-list">{noteElements}</div>}
+      {filteredNotes.length > 0 && <div className="note-list">{noteElements}</div>}
     </main>
   )
 }

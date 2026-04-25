@@ -13,6 +13,8 @@ import {
   checkAuth
 } from "./controllers.js"
 import cookieParser from "cookie-parser"
+import { createRouteHandler } from "uploadthing/express"
+import { uploadRouter } from "./uploadthing.js"
 
 import dotenv from "dotenv"
 
@@ -27,6 +29,13 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
+  })
+)
+
+app.use(
+  "/api/uploadthing",
+  createRouteHandler({
+    router: uploadRouter
   })
 )
 
