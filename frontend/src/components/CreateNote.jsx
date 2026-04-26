@@ -1,10 +1,12 @@
 import { useState } from "react"
 import { AddIcon } from "./Icons"
 import client from "../axiosClient"
+import { UploadButton } from "../uploadthing"
 
 export function CreateNote(props) {
   const [newNote, setNewNote] = useState("")
   const [error, setError] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
 
   async function saveNote() {
     console.log("Saving", newNote)
@@ -31,7 +33,8 @@ export function CreateNote(props) {
     */
 
     const response = await client.post("/note", {
-      content: newNote
+      content: newNote,
+      imageUrl: imageUrl
     })
 
     const json = response.data
@@ -65,7 +68,22 @@ export function CreateNote(props) {
           placeholder="What's on your mind?"
         />
         <span style={{ fontSize: "small", color: "red" }}>{error}</span>
+
+        <img src={imageUrl} alt="Uploaded" className="upload-preview" />
+
         <div className="flex justify-between items-center">
+          <UploadButton
+            endpoint="imageUploader"
+            onClientUploadComplete={(res) => {
+              // Do something with the response
+
+              setImageUrl(res[0].ufsUrl)
+
+              console.log("Files: ", res)
+              alert("Upload Completed")
+            }}
+          />
+
           <button
             className="btn btn-primary"
             style={{ marginLeft: "auto" }}

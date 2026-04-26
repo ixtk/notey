@@ -417,3 +417,17 @@ h1 {
 .page-subtitle {
   padding: 0 0.5rem 2rem;
 }
+
+.upload-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
