@@ -6,7 +6,7 @@ import { UploadButton } from "../uploadthing"
 export function CreateNote(props) {
   const [newNote, setNewNote] = useState("")
   const [error, setError] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
+  const [imageUrls, setImageUrls] = useState([])
 
   async function saveNote() {
     console.log("Saving", newNote)
@@ -34,7 +34,7 @@ export function CreateNote(props) {
 
     const response = await client.post("/note", {
       content: newNote,
-      imageUrl: imageUrl
+      imageUrls: imageUrls
     })
 
     const json = response.data
@@ -69,7 +69,10 @@ export function CreateNote(props) {
         />
         <span style={{ fontSize: "small", color: "red" }}>{error}</span>
 
-        <img src={imageUrl} alt="Uploaded" className="upload-preview" />
+        {imageUrls.map((imageUrl) => (
+          <img src={imageUrl} alt="Uploaded" className="upload-preview" />
+        ))}
+        {/* <img src={imageUrl} alt="Uploaded" className="upload-preview" /> */}
 
         <div className="flex justify-between items-center">
           <UploadButton
@@ -77,9 +80,14 @@ export function CreateNote(props) {
             onClientUploadComplete={(res) => {
               // Do something with the response
 
-              setImageUrl(res[0].ufsUrl)
+              const images = res.map((item) => item.ufsUrl)
+              // const imageNames = res.map((item) => item.name)
 
-              console.log("Files: ", res)
+              setImageUrls(images)
+
+              console.log("Original Files: ", res)
+              console.log("Image URLs: ", images)
+
               alert("Upload Completed")
             }}
           />
