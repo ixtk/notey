@@ -1,5 +1,5 @@
 import { generateUploadButton } from "@uploadthing/react";
 
 export const UploadButton = generateUploadButton({
-  url: "http://localhost:3000/api/uploadthing"
-});
+  url: `${import.meta.env.VITE_BACKEND_URL}/api/uploadthing`
+})
