@@ -108,7 +108,14 @@ function Note({ noteData, notes, setNotes }) {
         </>
       ) : (
         <div>
-          <img src={noteData.imageUrl} alt="" />
+          {noteData.imageUrl && <img src={noteData.imageUrl} alt="" />}
+
+          <div className="img-container">
+            {noteData.imageUrls.map((url) => {
+              return <img src={url} alt="" />
+            })}
+          </div>
+
           <div className="note-content mb-4">{noteData.content}</div>
         </div>
       )}

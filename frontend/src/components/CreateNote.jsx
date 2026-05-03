@@ -87,8 +87,6 @@ export function CreateNote(props) {
 
               console.log("Original Files: ", res)
               console.log("Image URLs: ", images)
-
-              alert("Upload Completed")
             }}
           />
 

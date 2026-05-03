@@ -431,3 +431,13 @@ img {
   border-radius: 5px;
   margin-bottom: 10px;
 }
+
+.img-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.img-container img {
+  max-width: 150px;
+}
