@@ -39,6 +39,8 @@ export function CreateNote(props) {
 
     const json = response.data
 
+    setImageUrls([])
+
     console.log(json)
 
     props.setNotes([json.note, ...props.notes])
